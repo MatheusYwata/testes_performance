@@ -1,0 +1,66 @@
+# ===============================
+# Python
+# ===============================
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.envrc
+
+# ===============================
+# Robot Framework outputs
+# ===============================
+
+output.xml
+log.html
+report.html
+
+# Screenshots gerados pelos testes
+*.png
+
+# Pastas comuns de resultados
+results/
+reports/
+logs/
+screenshots/
+
+# ===============================
+# Test artifacts / temporary
+# ===============================
+
+*.log
+*.tmp
+*.cache
+
+# ===============================
+# IDE / Editor
+# ===============================
+
+.vscode/
+.idea/
+
+# ===============================
+# Sistema operacional
+# ===============================
+
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Arquivos sensíveis
+# ===============================
+
+*.env
+*.secret
+*.key
+*.pem
+
+# ===============================
+# Outros arquivos   
+# ===============================
+sketch.robot
