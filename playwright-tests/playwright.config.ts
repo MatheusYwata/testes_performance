@@ -25,8 +25,11 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-      ignoreHTTPSErrors: true,
-      navigationTimeout: 60000,
+    viewport: { width: 1920, height: 1080 },
+    ignoreHTTPSErrors: true,
+    navigationTimeout: 60000,
+    storageState: undefined,
+    bypassCSP: true,
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 

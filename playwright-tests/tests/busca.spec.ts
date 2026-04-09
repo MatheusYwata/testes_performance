@@ -1,23 +1,28 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
-async function abrirBusca(page) {
-  for (let i = 0; i < 3; i++) {
-    await page.click('a[aria-label="Search button"]');
+test.beforeEach(async ({ page, context }) => {
+  await context.clearCookies();
+  await context.clearPermissions();
 
-    const input = page.locator('#search-field');
+  // 👇 AQUI (antes do goto)
+  await page.addInitScript(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
 
-    try {
-      await input.waitFor({ state: 'visible', timeout: 2000 });
-      return;
-    } catch {}
-  }
+  await page.goto('https://blogdoagi.com.br/', { waitUntil: 'domcontentloaded' });
 
-  throw new Error('Campo de busca não abriu');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(1000);
+});
+
+async function abrirBusca(page: Page) {
+  await page.locator('a[aria-label="Search button"]').first().click();
+  await page.waitForTimeout(500); // ajuda na estabilidade
+  await page.locator('#search-field').waitFor({ state: 'visible' });
 }
 
 test('Busca com termo válido', async ({ page }) => {
-  await page.goto('https://blogdoagi.com.br/');
-
   await abrirBusca(page);
 
   const input = page.locator('#search-field');
@@ -28,8 +33,6 @@ test('Busca com termo válido', async ({ page }) => {
 });
 
 test('Busca com termo inválido', async ({ page }) => {
-  await page.goto('https://blogdoagi.com.br/');
-
   await abrirBusca(page);
 
   const input = page.locator('#search-field');
@@ -40,8 +43,6 @@ test('Busca com termo inválido', async ({ page }) => {
 });
 
 test('Busca com caracteres especiais', async ({ page }) => {
-  await page.goto('https://blogdoagi.com.br/');
-
   await abrirBusca(page);
 
   const input = page.locator('#search-field');
@@ -52,20 +53,15 @@ test('Busca com caracteres especiais', async ({ page }) => {
 });
 
 test('Busca sem digitar termo', async ({ page }) => {
-  await page.goto('https://blogdoagi.com.br/');
-
   await abrirBusca(page);
 
   const input = page.locator('#search-field');
-
   await input.press('Enter');
 
   await expect(page.locator('article').first()).toBeVisible();
 });
 
 test('Busca com digitando espaço vazio', async ({ page }) => {
-  await page.goto('https://blogdoagi.com.br/');
-
   await abrirBusca(page);
 
   const input = page.locator('#search-field');
